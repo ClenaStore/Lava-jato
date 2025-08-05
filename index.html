@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Lava-Jato - Agendamentos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      background-color: #111b21;
+      color: #e9edef;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      color: #25d366;
+    }
+    form {
+      background: #202c33;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 500px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    label {
+      font-weight: bold;
+    }
+    input, select, textarea, button {
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 6px;
+      border: none;
+    }
+    input, select, textarea {
+      background-color: #2a3942;
+      color: white;
+    }
+    button {
+      background-color: #25d366;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background-color: #1e9e51;
+    }
+    .sucesso {
+      color: #25d366;
+      text-align: center;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📅 Agendamento - Lava-Jato</h1>
+  <form id="formAgendamento">
+    <label>Nome do Cliente:</label>
+    <input type="text" name="nome" required />
+
+    <label>Telefone (WhatsApp):</label>
+    <input type="tel" name="telefone" required />
+
+    <label>Veículo:</label>
+    <input type="text" name="veiculo" required />
+
+    <label>Placa:</label>
+    <input type="text" name="placa" required />
+
+    <label>Data:</label>
+    <input type="date" name="data" required />
+
+    <label>Horário:</label>
+    <input type="time" name="horario" required />
+
+    <label>Serviço:</label>
+    <select name="servico" required>
+      <option value="">Selecione...</option>
+      <option value="Lavagem simples">Lavagem simples</option>
+      <option value="Lavagem completa">Lavagem completa</option>
+      <option value="Polimento">Polimento</option>
+      <option value="Higienização">Higienização</option>
+    </select>
+
+    <label>Valor estimado (R$):</label>
+    <input type="number" step="0.01" name="valor" required />
+
+    <label>Observações:</label>
+    <textarea name="observacoes" rows="3"></textarea>
+
+    <button type="submit">💾 Agendar</button>
+    <div class="sucesso" id="mensagem"></div>
+  </form>
+
+  <script>
+    const formulario = document.getElementById("formAgendamento");
+    const mensagem = document.getElementById("mensagem");
+
+    formulario.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const dados = Object.fromEntries(new FormData(formulario).entries());
+
+      const resposta = await fetch("https://script.google.com/macros/s/AKfycbwDgERbVhmE-QMEUauxYlJ5mVk6N2yxt9v9ykiveyNT6atLYy1l92LSugEfD1XQBfbh/exec", {
+        method: "POST",
+        body: JSON.stringify(dados)
+      });
+
+      const texto = await resposta.text();
+      mensagem.textContent = texto;
+      formulario.reset();
+    });
+  </script>
+</body>
+</html>
